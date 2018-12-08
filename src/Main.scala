@@ -1,5 +1,9 @@
-import scalap.hashing.BloomFilter
+import scalap.hashing.{BloomFilter, LSH, MinHash}
 import scalap.tree.KDTree
+
+import scala.collection.mutable.ArrayBuffer
+import scala.io.Source
+
 
 object Main extends App {
     def testKDTree(): Unit = {
@@ -33,7 +37,30 @@ object Main extends App {
         println(bloomFilter.search("plaplaplaplapla"))
     }
 
+    def testMinHash(): Unit = {
+        val documents = List(
+            "lorem ipsum dolor sit amet", // document 0
+            "excepteur sint occaecat cupidatat non proident", // document 1
+            "irure dolor in reprehenderit in voluptate velit esse", // document 2
+            "to do or not to do", // document 3
+            "to do or not to do", // document 4
+            "to be or not to be") // document 5
+            .toIndexedSeq.zipWithIndex
+
+        val minHash = new MinHash(documents, 5)
+        val minHashes = minHash.documentWords.mapValues(wordSet => minHash.getMinHash(wordSet))
+        for (minHash <- minHashes) {
+            println("Document: " + minHash._1)
+            minHash._2.foreach(println)
+        }
+    }
+
+    def testLSH():Unit = {
+
+    }
 //    testKDTree()
-    testBloomFilters()
+//    testBloomFilters()
+    testMinHash()
+//    testLSH()
 
 }
