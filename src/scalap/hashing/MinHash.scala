@@ -85,6 +85,10 @@ class MinHash(documents: Map[Int, String], var length: Int)
         return minHash
     }
 
+    /**
+      * Calculates MinHash for all documents.
+      * @return a map of (documentId, MinHash)
+      */
     def getMinHashes(): Map[Int, Array[Double]] = {
         return this.documentWords.mapValues(wordSet => this.getMinHash(wordSet))
     }
