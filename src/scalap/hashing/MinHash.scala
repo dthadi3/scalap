@@ -2,6 +2,12 @@ package scalap.hashing
 
 import scala.util.Random
 
+/**
+  * MinHash implementation
+  * Info: https://en.wikipedia.org/wiki/MinHash
+  * @param documents map of documents (id, text)
+  * @param length length of MinHash signature
+  */
 class MinHash(documents: Map[Int, String], var length: Int)
 {
     val documentWords: Map[Int, Set[String]] = extractDocumentWords()
