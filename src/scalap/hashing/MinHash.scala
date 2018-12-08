@@ -2,7 +2,7 @@ package scalap.hashing
 
 import scala.util.Random
 
-class MinHash(documents: IndexedSeq[(String, Int)], var length: Int)
+class MinHash(documents: Map[Int, String], var length: Int)
 {
     val documentWords: Map[Int, Set[String]] = extractDocumentWords()
     val vocabulary: Map[String, Int] = documentWords.values.flatten.toSet.toIndexedSeq.zipWithIndex.toMap
@@ -15,8 +15,8 @@ class MinHash(documents: IndexedSeq[(String, Int)], var length: Int)
     private def extractDocumentWords(): Map[Int, Set[String]] = {
         documents
             .map(document => {
-                val words = document._1.split(" ").map(_.mkString).toSet
-                val documentId = document._2
+                val documentId = document._1
+                val words = document._2.split(" ").map(_.mkString).toSet
                 (documentId, words)
             }).toMap
     }

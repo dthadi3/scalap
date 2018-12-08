@@ -38,14 +38,13 @@ object Main extends App {
     }
 
     def testMinHash(): Unit = {
-        val documents = List(
-            "lorem ipsum dolor sit amet", // document 0
-            "excepteur sint occaecat cupidatat non proident", // document 1
-            "irure dolor in reprehenderit in voluptate velit esse", // document 2
-            "to do or not to do", // document 3
-            "to do or not to do", // document 4
-            "to be or not to be") // document 5
-            .toIndexedSeq.zipWithIndex
+        val documents = Map(
+            (0, "lorem ipsum dolor sit amet"),
+            (1, "excepteur sint occaecat cupidatat non proident"),
+            (2, "irure dolor in reprehenderit in voluptate velit esse"),
+            (3, "to do or not to do"),
+            (4, "to do or not to do"),
+            (5, "to be or not to be"))
 
         val minHash = new MinHash(documents, 5)
         val minHashes = minHash.getMinHashes()
