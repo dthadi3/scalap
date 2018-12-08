@@ -7,7 +7,7 @@ import scala.io.Source
 
 object Main extends App {
     def testKDTree(): Unit = {
-        var kd = new KDTree(
+        val kd = new KDTree(
             Array(
                 List(1,2),
                 List(3,4),
@@ -48,7 +48,7 @@ object Main extends App {
             .toIndexedSeq.zipWithIndex
 
         val minHash = new MinHash(documents, 5)
-        val minHashes = minHash.documentWords.mapValues(wordSet => minHash.getMinHash(wordSet))
+        val minHashes = minHash.getMinHashes()
         for (minHash <- minHashes) {
             println("Document: " + minHash._1)
             minHash._2.foreach(println)

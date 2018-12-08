@@ -84,4 +84,8 @@ class MinHash(documents: IndexedSeq[(String, Int)], var length: Int)
             }
         return minHash
     }
+
+    def getMinHashes(): Map[Int, Array[Double]] = {
+        return this.documentWords.mapValues(wordSet => this.getMinHash(wordSet))
+    }
 }
