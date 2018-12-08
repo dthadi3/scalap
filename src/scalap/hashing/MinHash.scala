@@ -18,7 +18,7 @@ class MinHash(documents: Map[Int, String], var length: Int)
                 val documentId = document._1
                 val words = document._2.split(" ").map(_.mkString).toSet
                 (documentId, words)
-            }).toMap
+            })
     }
 
     /**
