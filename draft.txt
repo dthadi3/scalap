@@ -1,0 +1,12 @@
+//    def getPoints(node: Node = root): List[List[Int]] = {
+//        if (node.left != null && node.right != null)
+//            node.point :: getPoints(node.left) ::: getPoints(node.right)
+//        else if (node.left != null) {
+//            node.point :: getPoints(node.left)
+//        }
+//        else if (node.right != null) {
+//            node.point :: getPoints(node.right)
+//        }
+//        else
+//            List(node.point)
+//    }
