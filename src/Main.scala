@@ -4,6 +4,7 @@ import scalap.tree.KDTree
 import scala.collection.LinearSeq
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
+import scalap.tests.KDTreeTest
 
 
 object Main extends App {
@@ -25,39 +26,7 @@ object Main extends App {
             (List(7,9).toArray, 1),
             (List(1,7).toArray, 1)
         ))
-
-//        println("Nodes: ")
-//        kd.getNodes().foreach(println)
-//        println()
-//
-//        println("Nodes after (6,9) insertion: ")
-//        kd.insert(List(6,9).toArray)
-//        kd.getNodes().foreach(println)
-//        println()
-//
-//        println("Search: " + kd.search(List(1,7).toArray))
-//        println("Search: " + kd.search(List(3,4).toArray))
-//        println()
-//
-////
-//        kd.delete(List(4,7).toArray)
-//        println("Points after (4,7) removal:")
-//        kd.getNodes().foreach(println)
-//        println()
-
-        kd.insert((List(6,9).toArray, 1))
-        kd.getNodes().foreach(println)
-        println()
-//        println(kd.nearestNeighbor(List(6, 5).toArray))
-        println()
-//        kd.kNearestNeighbors(List(6,5).toArray, 4).foreach(println)
-//        kd.kNearestNeighbors(List(2,2).toArray, 4).foreach(println)
-//        kd.kNearestNeighbors(List(6,8).toArray, 4).foreach(println)
-//        kd.kNearestNeighbors(List(-1,-1).toArray, 4).foreach(println)
-        kd.insert((List(6,7).toArray, 1))
-        kd.kNN(List(5,6).toArray, 2).foreach(println)
-//        kd.rangeSearch(List(5,5).toArray, List(6,6).toArray).foreach(println)
-//
+        kd.rangeSearch(List(5,5).toArray, List(6,6).toArray).foreach(println)
 
     }
 
@@ -109,7 +78,10 @@ object Main extends App {
         println("Similar to 'to be or not to be':")
         lsh.findSimilar("mmm to be or not to be").foreach(println)
     }
-    testKDTree()
+
+    var kdTreeTest = new KDTreeTest()
+    kdTreeTest.run()
+//    testKDTree()
 //    testBloomFilters()
 //    testMinHash()
 //    testLSH()
