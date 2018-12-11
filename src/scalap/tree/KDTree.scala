@@ -1,86 +1,60 @@
 package scalap.tree
+import scala.collection.mutable
+import datatypes.KDNode
+
 import Ordering.Implicits._
 import Numeric.Implicits._
-import java.util
-
-import scala.collection.mutable
-import scala.collection.mutable.Queue
-import scala.collection.LinearSeq
 
 
-class KDTree[T: Numeric](var points: Array[Array[T]])
+class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
 {
-    private def dimensions: Int = points(0).length
+    private def dimensions: Int = items(0)._1.length
+    var points: List[Array[T]] = items.map(n => n._1).toList
     this.checkDimentions(points)
-    var root: Node = build(points, 0)
+    var root: KDNode[T, D] = build(items, 0)
 
-    class Node( var axis: Int = 0,
-                var point: Array[T] = null,
-                var left: Node = null,
-                var right: Node = null,
-                var parent: Node = null
-              ) {
-        override def toString(): String = {
-            if (point != null) "Node((" + point.mkString(", ") + ") , axis:" + axis + ", parent:" + parent + ")"
-            else "EMPTY-NODE"
-        }
-
-        def die(): Unit = {
-            if (this.parent.left == this) this.parent.left = null
-            else if (this.parent.right == this) this.parent.right = null
-            this.point = null
-        }
-
-        def isLeaf(): Boolean = {
-            this.right == null && this.left == null
-        }
-
-        def hasRightChild(): Boolean = {
-            this.right != null
-        }
-
-        def hasLeftChild(): Boolean = {
-            this.left != null
-        }
-    }
-
-    def build(points:  Array[Array[T]], axis: Int, parent: Node = null): Node = {
-        if (points.isEmpty) {
+    def build(items:  List[(Array[T], D)], axis: Int, parent: KDNode[T, D] = null): KDNode[T, D] = {
+        if (items.isEmpty) {
             return null
         }
 
-        val node = new Node(axis)
 
-        val sorted_points = points.sortWith(_(axis) < _(axis))
+//        val sorted_points = points.sortWith(_(axis) < _(axis))
+        val sorted_points = items.sortWith((x, y) => x._1(axis) < y._1(axis))
         val median = sorted_points.length / 2
 
-        node.point = sorted_points(median)
-        node.parent = parent
+        val point = sorted_points(median)._1
+        val data = sorted_points(median)._2
+        val node = new KDNode[T, D](point, data, axis, parent)
         node.left  = build(sorted_points.slice(0,median), nextAxis(axis), node)
         node.right = build(sorted_points.slice(median+1, sorted_points.length), nextAxis(axis), node)
 
-        return node
+        node
     }
 
-    def insert(point: Array[T]): Node = {
-        def insertTo(node: Node, parent: Node = null): Node = {
+    def insert(item: (Array[T], D)): KDNode[T, D] = {
+        var point = item._1
+        var data = item._2
+        def insertTo(node: KDNode[T, D], parent: KDNode[T, D] = null): KDNode[T, D] = {
             node.point = point
+            node.data = data
+            node.axis = node.axis
             node.parent = parent
-            return node
+            node
         }
 
-        def insertToLeft(node: Node): Node = {
-            node.left = new Node(nextAxis(node.axis), point, null, null, node)
-            return node.left
+        def insertToLeft(node: KDNode[T, D]): KDNode[T, D] = {
+            node.left = new KDNode(point, data,  nextAxis(node.axis), node)
+            node.left
         }
 
-        def insertToRight(node: Node): Node = {
-            node.right = new Node(nextAxis(node.axis), point, null, null, node)
-            return node.right
+        def insertToRight(node: KDNode[T, D]): KDNode[T, D] = {
+            node.right = new KDNode(point, data,  nextAxis(node.axis), node)
+            node.right
         }
 
-        def insertFrom(node: Node, parent: Node = null): Node = {
-                if (node.point==null) return insertTo(node)
+        def insertFrom(node: KDNode[T, D], parent: KDNode[T, D] = null): KDNode[T, D] = {
+                if (node.point == null) return insertTo(node)
                 if (point(node.axis) < node.point(node.axis)) {
                     if (node.left == null) insertToLeft(node)
                     else insertFrom(node.left)
@@ -95,69 +69,177 @@ class KDTree[T: Numeric](var points: Array[Array[T]])
         insertFrom(root)
     }
 
-    def search(point: Array[T]): Node = {
-        def searchFrom(node: Node): Node = {
-            if (node.point sameElements point) return node
+    def search(point: Array[T]): KDNode[T, D] = {
+        def searchFrom(node: KDNode[T, D]): KDNode[T, D] = {
+            if (node.point.sameElements(point)) return node
             if (point(node.axis) < node.point(node.axis)) {
-                if (node.left == null) null
+                if (!node.hasLeftChild()) null
                 else searchFrom(node.left)
             }
             else {
-                if (node.right == null) null
+                if (!node.hasRightChild()) null
                 else searchFrom(node.right)
             }
         }
-
         searchFrom(root)
     }
 
     def delete(point: Array[T]): Unit = {
-        def removeNode(node: Node): Unit = {
+        def removeNode(node: KDNode[T, D]): Unit = {
             if (node.isLeaf()) node.die()
             else replace(node)
         }
 
-        def replace(node: Node): Unit = {
+        def replace(node: KDNode[T, D]): Unit = {
             val replacement = findReplacementNode(node)
             node.point = replacement.point
             removeNode(replacement)
         }
 
-        def findReplacementNode(node: Node): Node = {
+        def findReplacementNode(node: KDNode[T, D]): KDNode[T, D] = {
             if (node.hasRightChild()) {
                 getNodes(node.right)
-                    .min(Ordering.by((n: Node) => n.point(node.axis)))
+                    .min(Ordering.by((n: KDNode[T, D]) => n.point(node.axis)))
             }
             else {
                 getNodes(node.left)
-                    .max(Ordering.by((n: Node) => n.point(node.axis)))
+                    .max(Ordering.by((n: KDNode[T, D]) => n.point(node.axis)))
             }
         }
 
-        val node: Node = search(point)
+        val node: KDNode[T, D] = search(point)
 
         if (node == null) throw new Exception("No Such Point!")
         removeNode(node)
     }
 
-    def getNodes(node: Node = root): List[Node] = {
-        if (node.left != null && node.right != null)
+    def rangeSearch(min: Array[T], max: Array[T]): List[KDNode[T, D]] = {
+        checkDimentions(min)
+        checkDimentions(max)
+        var nodes = List[KDNode[T, D]]()
+        var counter = 0
+
+        def nodeInRange(node: KDNode[T, D]): Boolean = {
+            for (i <- node.point.indices) {
+                if (!(min(i) <= node.point(i) && node.point(i) <= max(i))) {
+                    return false
+                }
+            }
+            true
+        }
+
+        def searchFrom(node: KDNode[T, D]): Unit = {
+            counter = counter + 1
+            if (nodeInRange(node)) nodes = node :: nodes
+            if (min(node.axis) < node.point(node.axis) && node.hasLeftChild()) searchFrom(node.left)
+            if (max(node.axis) > node.point(node.axis) && node.hasRightChild()) searchFrom(node.right)
+        }
+
+        searchFrom(root)
+        println("Run times: " + counter)
+        nodes
+    }
+
+    def nearest(point: Array[T]): (KDNode[T, D], Double) = {
+        kNN(point, 1).head
+    }
+
+    def kNN(point: Array[T], k: Int): List[(KDNode[T, D], Double)] = {
+        checkDimentions(point)
+        val proned = mutable.Set[KDNode[T, D]]()
+        var candidates = mutable.Set[(KDNode[T, D], Double)]()
+        var searchCounter = 0
+        var backtrackCounter = 0
+
+        def euclideanDistance(p: Array[T]): Double = {
+            Math.sqrt(p.zip(point).map { case (x,y) => Math.pow((y - x).toDouble, 2) }.sum)
+        }
+
+        def maxDistance: Double = {
+            candidates.max(Ordering.by((pair: (KDNode[T, D], Double)) => pair._2))._2
+        }
+
+        def searchFrom(node: KDNode[T, D]): KDNode[T, D] = {
+            // println(node)
+            if (point(node.axis) < node.point(node.axis)) {
+                if (!node.hasLeftChild()) node
+                else searchFrom(node.left)
+            }
+            else {
+                if (!node.hasRightChild()) node
+                else searchFrom(node.right)
+            }
+        }
+
+        def backtrack(node: KDNode[T, D]): Unit = {
+            // println("backtrack " + node)
+            backtrackCounter = backtrackCounter + 1
+            var dist = euclideanDistance(node.point)
+            if (candidates.size < k || dist < maxDistance) {
+                candidates.add(node, dist)
+            }
+
+            if (node.hasParent()) {
+                searchNN(node.parent)
+                backtrack(node.parent)
+            }
+        }
+
+        def searchNN(node: KDNode[T, D]): Unit = {
+            // println("search node " + node)
+            searchCounter = searchCounter + 1
+            val dist = euclideanDistance(node.point)
+            if (candidates.size < k || dist < maxDistance) {
+                candidates.add(node, dist)
+            }
+
+            if (candidates.size < k || dist < maxDistance) {
+                if (node.hasRightChild()  && !proned.contains(node.right)) {
+                    searchNN(node.right)
+                }
+                if (node.hasLeftChild() && !proned.contains(node.left)) {
+                    searchNN(node.left)
+                }
+            } else {
+//                println("proned " + node)
+                proned.add(node)
+            }
+
+            if (candidates.size > k) {
+                // :_* forces factory method to see the list as a list of arguments
+                candidates = scala.collection.mutable.Set(candidates.toList.sortWith(_._2 < _._2).take(k) :_*)
+            }
+        }
+
+        if (k < 1) throw new Exception("k less than 1!")
+        var node = searchFrom(root)
+        candidates.add((node, euclideanDistance(node.point)))
+        backtrack(node)
+
+        println("Candidates: " + candidates.size)
+        println("search: " + searchCounter)
+        println("backtrack: " + backtrackCounter)
+        println("proned: " + proned.size)
+
+        candidates.toList
+    }
+
+    def getNodes(node: KDNode[T, D] = root): List[KDNode[T, D]] = {
+        if (node.hasLeftChild() && node.hasRightChild())
             node :: getNodes(node.left) ::: getNodes(node.right)
-        else if (node.left != null) {
+        else if (node.hasLeftChild()) {
             node :: getNodes(node.left)
         }
-        else if (node.right != null) {
+        else if (node.hasRightChild()) {
             node :: getNodes(node.right)
         }
         else
             List(node)
     }
 
-
-
     private def nextAxis(axis: Int): Int = (axis+1) % dimensions
 
-    private def checkDimentions(points:  Array[Array[T]]): Unit = {
+    private def checkDimentions(points:  List[Array[T]]): Unit = {
         for (point <- points) {
             this.checkDimentions(point)
         }

@@ -8,40 +8,55 @@ import scala.io.Source
 
 object Main extends App {
     def testKDTree(): Unit = {
-        val kd = new KDTree(Array(
-            LinearSeq(1,2).toArray,
-            LinearSeq(3,4).toArray,
-            LinearSeq(5,6).toArray,
-            LinearSeq(4,7).toArray,
-            LinearSeq(7,5).toArray,
-            LinearSeq(6,4).toArray,
-            LinearSeq(1,3).toArray,
-            LinearSeq(7,8).toArray,
-            LinearSeq(1,7).toArray
+        val kd = new KDTree[Int, Int](List(
+            (List(1,2).toArray, 1),
+            (List(3,4).toArray, 1),
+            (List(5,6).toArray, 1),
+            (List(4,7).toArray, 1),
+            (List(7,5).toArray, 1),
+            (List(6,4).toArray, 1),
+            (List(1,3).toArray, 1),
+            (List(7,8).toArray, 1),
+            (List(4,2).toArray, 1),
+            (List(0,0).toArray, 1),
+            (List(6,6).toArray, 1),
+            (List(7,0).toArray, 1),
+            (List(7,1).toArray, 1),
+            (List(7,9).toArray, 1),
+            (List(1,7).toArray, 1)
         ))
 
-        println("Nodes: ")
-        kd.getNodes().foreach(println)
-        println()
-
-        println("Nodes after (6,9) insertion: ")
-        kd.insert(List(6,9).toArray)
-        kd.getNodes().foreach(println)
-        println()
-
-        println("Search: " + kd.search(List(1,7).toArray))
-        println("Search: " + kd.search(List(3,4).toArray))
-        println()
-
-//        kd.remove(List(6,9))
-//        println("Points after (6,9) removal:")
+//        println("Nodes: ")
 //        kd.getNodes().foreach(println)
 //        println()
 //
-        kd.delete(List(4,7).toArray)
-        println("Points after (4,7) removal:")
+//        println("Nodes after (6,9) insertion: ")
+//        kd.insert(List(6,9).toArray)
+//        kd.getNodes().foreach(println)
+//        println()
+//
+//        println("Search: " + kd.search(List(1,7).toArray))
+//        println("Search: " + kd.search(List(3,4).toArray))
+//        println()
+//
+////
+//        kd.delete(List(4,7).toArray)
+//        println("Points after (4,7) removal:")
+//        kd.getNodes().foreach(println)
+//        println()
+
+        kd.insert((List(6,9).toArray, 1))
         kd.getNodes().foreach(println)
         println()
+//        println(kd.nearestNeighbor(List(6, 5).toArray))
+        println()
+//        kd.kNearestNeighbors(List(6,5).toArray, 4).foreach(println)
+//        kd.kNearestNeighbors(List(2,2).toArray, 4).foreach(println)
+//        kd.kNearestNeighbors(List(6,8).toArray, 4).foreach(println)
+//        kd.kNearestNeighbors(List(-1,-1).toArray, 4).foreach(println)
+        kd.insert((List(6,7).toArray, 1))
+        kd.kNN(List(5,6).toArray, 2).foreach(println)
+//        kd.rangeSearch(List(5,5).toArray, List(6,6).toArray).foreach(println)
 //
 
     }

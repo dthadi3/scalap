@@ -10,3 +10,45 @@
 //        else
 //            List(node.point)
 //    }
+
+
+
+//        kNN works
+//        def searchFrom(node: KDNode[T]): Unit = {
+//            counter = counter + 1
+//            val dist = euclideanDistance(node.point)
+//            if (candidates.size < k || dist < maxDistance) {
+//                candidates.add(node, dist)
+//            }
+//
+//            if (point(node.axis) <= node.point(node.axis) && node.hasLeftChild()) {
+//                searchFrom(node.left)
+//            } else if (node.hasRightChild()) {
+//                searchFrom(node.right)
+//            }
+//
+//            if (dist < maxDistance) {
+//                if (point(node.axis) <= node.point(node.axis) && node.hasRightChild()) {
+//                    searchFrom(node.right)
+//                } else if (node.hasLeftChild()) {
+//                    searchFrom(node.left)
+//                }
+//            }
+//        }
+
+
+Backtrack parent
+
+//                if (node.parent.hasLeftChild()) {
+//                    dist = euclideanDistance(node.parent.left.point)
+//                    if (candidates.size < k || dist < maxDistance) {
+//                        searchNN(node.parent.left)
+//                    }
+//                }
+//
+//                if (node.parent.hasRightChild()) {
+//                    dist = euclideanDistance(node.parent.right.point)
+//                    if (candidates.size < k || dist < maxDistance) {
+//                        searchNN(node.parent.right)
+//                    }
+//                }
