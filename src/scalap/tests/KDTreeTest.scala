@@ -53,20 +53,6 @@ class KDTreeTest
         println("[+] KDTree build OK!")
     }
 
-    def insertTest(): Unit = {
-        assert(kd.search(List(6,9).toArray) == null)
-        kd.insert((List(6,9).toArray, 1))
-        assert(kd.search(List(6,9).toArray).isInstanceOf[KDNode[Int, Int]])
-        println("[+] KDTree insert OK!")
-    }
-
-    def deleteTest(): Unit = {
-        assert(kd.search(List(6,9).toArray).isInstanceOf[KDNode[Int, Int]])
-        kd.delete(List(6,9).toArray)
-        assert(kd.search(List(6,9).toArray) == null)
-        println("[+] KDTree delete OK!")
-    }
-
     def knnTest(): Unit = {
         val nn = kd.nearest(List(5,6).toArray)
         assert(List(5,6).toArray sameElements  nn._1.point)
@@ -132,15 +118,82 @@ class KDTreeTest
         assert(res contains List(7,5))
         assert(res contains List(6,4))
 
+        knn = kd.kNN(List(2,9).toArray, 2)
+        res = knn.map{node => node._1.point.toList}
+        assert(knn.size == 2)
+        assert(res contains List(1,7))
+        assert(res contains List(4,7))
+
+        knn = kd.kNN(List(100,100).toArray, 3)
+        res = knn.map{node => node._1.point.toList}
+        assert(knn.size == 3)
+        assert(res contains List(7,8))
+        assert(res contains List(7,9))
+        assert(res contains List(6,6))
 
         println("[+] KDTree knn OK!")
+    }
+
+    def insertTest(): Unit = {
+        assert(kd.search(List(6,9).toArray) == null)
+        kd.insert((List(6,9).toArray, 1))
+        assert(kd.search(List(6,9).toArray).isInstanceOf[KDNode[Int, Int]])
+        println("[+] KDTree insert OK!")
+    }
+
+    /**
+      * Delete test, always run after insertTest
+      */
+    def deleteTest(): Unit = {
+        assert(kd.search(List(6,9).toArray).isInstanceOf[KDNode[Int, Int]])
+        kd.delete(List(6,9).toArray)
+        assert(kd.search(List(6,9).toArray) == null)
+
+        var nodes = kd.getNodes()
+        kd.delete(List(5,6).toArray)
+        assert(nodes.head.point.sameElements(List(6,4)))
+        assert(nodes(1).point.sameElements(List(1,3)))
+        assert(nodes(2).point.sameElements(List(1,2)))
+        assert(nodes(3).point.sameElements(List(0,0)))
+        assert(nodes(4).point.sameElements(List(4,2)))
+        assert(nodes(5).point.sameElements(List(3,4)))
+        assert(nodes(6).point.sameElements(List(1,7)))
+        assert(nodes(7).point.sameElements(List(4,7)))
+        assert(nodes(8).point.sameElements(List(7,5)))
+        assert(nodes(9).point.sameElements(List(7,0)))
+        assert(nodes(11).point.sameElements(List(7,1)))
+        assert(nodes(12).point.sameElements(List(7,8)))
+        assert(nodes(13).point.sameElements(List(6,6)))
+        assert(nodes(14).point.sameElements(List(7,9)))
+
+        println("[+] KDTree delete OK!")
+    }
+
+    def updateTest(): Unit = {
+        kd.update(List(7, 9).toArray, 10)
+        val node = kd.search(List(7, 9).toArray)
+        assert(node.data == 10)
+        println("[+] KDTree update OK!")
+    }
+
+    def rangeSearchTest(): Unit = {
+        val nodes = kd.rangeSearch(List(4,4).toArray, List(8,8).toArray)
+        val res = nodes.map{node => node.point.toList}
+        assert(res contains List(4,7))
+        assert(res contains List(6,4))
+        assert(res contains List(6,6))
+        assert(res contains List(7,8))
+        assert(res contains List(7,5))
+
     }
 
     def run(): Unit = {
         buildTest()
         searchTest()
+        knnTest()
         insertTest()
         deleteTest()
-        knnTest()
+        updateTest()
+        rangeSearchTest()
     }
 }

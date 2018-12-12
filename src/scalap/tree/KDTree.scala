@@ -114,6 +114,7 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
                 else searchFrom(node.right)
             }
         }
+        checkDimentions(point)
         searchFrom(root)
     }
 
@@ -189,7 +190,7 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
     }
 
     /**
-      * Searches for k nearest neighbors
+      * Searches for k nearest neighbors.
       *
       * @param point array point
       * @param k how many results
@@ -243,7 +244,6 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
             Math.sqrt(Math.pow(node.point(node.axis).toDouble() - point(node.axis).toDouble() ,2))
 
         def searchNN(node: KDNode[T, D]): Unit = {
-//            println(node)
             searchCounter = searchCounter + 1
             val dist = euclideanDistance(node.point)
 
@@ -273,6 +273,12 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
 //        println("proned: " + proned.size)
 
         candidates.toList.sortWith(_._2 < _._2).take(k)
+    }
+
+    def update(point: Array[T], value: D): Unit = {
+        checkDimentions(point)
+        val node = search(point)
+        node.data = value
     }
 
     /**
