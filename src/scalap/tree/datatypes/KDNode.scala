@@ -27,11 +27,11 @@ class KDNode[T, D](var point: Array[T] = null,
     }
 
     def hasRightChild(): Boolean = {
-        this.right != null
+        this.right != null && this.right.point != null
     }
 
     def hasLeftChild(): Boolean = {
-        this.left != null
+        this.left != null && this.left.point != null
     }
 
     def hasParent(): Boolean = {

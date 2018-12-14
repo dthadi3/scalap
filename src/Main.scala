@@ -8,28 +8,6 @@ import scalap.tests.KDTreeTest
 
 
 object Main extends App {
-    def testKDTree(): Unit = {
-        val kd = new KDTree[Int, Int](List(
-            (List(1,2).toArray, 1),
-            (List(3,4).toArray, 1),
-            (List(5,6).toArray, 1),
-            (List(4,7).toArray, 1),
-            (List(7,5).toArray, 1),
-            (List(6,4).toArray, 1),
-            (List(1,3).toArray, 1),
-            (List(7,8).toArray, 1),
-            (List(4,2).toArray, 1),
-            (List(0,0).toArray, 1),
-            (List(6,6).toArray, 1),
-            (List(7,0).toArray, 1),
-            (List(7,1).toArray, 1),
-            (List(7,9).toArray, 1),
-            (List(1,7).toArray, 1)
-        ))
-        kd.rangeSearch(List(5,5).toArray, List(6,6).toArray).foreach(println)
-
-    }
-
 
     def testBloomFilters(): Unit = {
         var bloomFilter = new BloomFilter( 100, 1000)
@@ -73,17 +51,16 @@ object Main extends App {
             (4, "to do or not to do"),
             (5, "to be or not to be"))
 
-        val lsh = new LSH(2, 2, documents, 0.2)
+        val lsh = new LSH(4, 2, documents, 0.2)
         println()
         println("Similar to 'to be or not to be':")
         lsh.findSimilar("mmm to be or not to be").foreach(println)
     }
 
-    var kdTreeTest = new KDTreeTest()
-    kdTreeTest.run()
-//    testKDTree()
+//    var kdTreeTest = new KDTreeTest()
+//    kdTreeTest.run()
 //    testBloomFilters()
 //    testMinHash()
-//    testLSH()
+    testLSH()
 
 }

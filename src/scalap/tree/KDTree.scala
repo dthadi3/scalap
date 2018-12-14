@@ -141,7 +141,6 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
             if (node.hasRightChild()) getNodes(node.right).min(Ordering.by((n: KDNode[T, D]) => n.point(node.axis)))
             else getNodes(node.left).max(Ordering.by((n: KDNode[T, D]) => n.point(node.axis)))
         }
-
         val node: KDNode[T, D] = search(point)
         if (node == null) throw new Exception("No Such Point!")
         removeNode(node)
@@ -249,13 +248,11 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
 
             if(!proned.contains(node)) {
                 if (candidates.size < k || dist < maxDistance) candidates.add(node, dist)
-                if (node.hasRightChild()) {
-                    if (planeDistance(node.right) <= maxDistance || dist < maxDistance)
-                    searchNN(node.right)
+                if (node.hasRightChild() && !proned.contains(node.right)) {
+                    if (planeDistance(node.right) <= maxDistance || dist < maxDistance) searchNN(node.right)
                 }
-                if (node.hasLeftChild()) {
-                    if (planeDistance(node.left) <= maxDistance || dist < maxDistance)
-                        searchNN(node.left)
+                if (node.hasLeftChild() && !proned.contains(node.left)) {
+                    if (planeDistance(node.left) <= maxDistance || dist < maxDistance) searchNN(node.left)
                 }
             }
             proned.add(node)
@@ -276,8 +273,8 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
     }
 
     def update(point: Array[T], value: D): Unit = {
-        checkDimentions(point)
         val node = search(point)
+        if (node == null) throw new Exception("No Such Point!")
         node.data = value
     }
 
