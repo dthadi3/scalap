@@ -27,8 +27,8 @@ class BloomFilter(var elementsCount: Int, var bitsCount: Int, var hashesCount: I
 
     private val bitSet = new mutable.BitSet(bitsCount)
     checkInputs()
-    println("Number of HashFunctions: " + hashesCount)
-    println("False Positive Probability: " + porbabilityOfFalsePositives)
+//    println("Number of HashFunctions: " + hashesCount)
+//    println("False Positive Probability: " + porbabilityOfFalsePositives)
 
     /**
       * Builds a bloomfilter by inserting a list of strings one by one

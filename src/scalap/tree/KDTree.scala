@@ -174,7 +174,7 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
         }
 
         searchFrom(root)
-        println("Run times: " + counter)
+//        println("Run times: " + counter)
         nodes
     }
 
