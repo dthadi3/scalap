@@ -2,7 +2,9 @@ package scalap.hashing
 
 /**
   * Locality Sensitivity Hashing Implementation
-  * Info: https://en.wikipedia.org/wiki/Locality-sensitive_hashing
+  * Info:
+  *  - https://en.wikipedia.org/wiki/Locality-sensitive_hashing
+  *  - https://towardsdatascience.com/understanding-locality-sensitive-hashing-49f6d1f6134
   *
   * @param minHashLength MinHash length
   * @param numberOfBands number of Bands
