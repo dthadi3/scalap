@@ -107,7 +107,7 @@ class KDTreeTest extends BaseTest
         assertTrue(res contains List(3,4))
         assertTrue(res contains List(5,6))
         assertTrue(res contains List(4,7))
-        assertTrue(res contains List(6,6))
+        assertTrue((res contains List(6,6)) || (res contains List(6,4)))
 
         knn = kd.kNN(List(5,6).toArray, 5)
         res = knn.map{node => node._1.point.toList}

@@ -4,6 +4,7 @@ import datatypes.KDNode
 
 import Ordering.Implicits._
 import Numeric.Implicits._
+import scala.collection.mutable.ListBuffer
 
 /**
   * KD-Tree implementation
@@ -271,6 +272,7 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
 
         candidates.toList.sortWith(_._2 < _._2).take(k)
     }
+
 
     def update(point: Array[T], value: D): Unit = {
         val node = search(point)

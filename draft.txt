@@ -52,3 +52,51 @@ Backtrack parent
 //                        searchNN(node.parent.right)
 //                    }
 //                }
+
+/**
+  * Searches for k nearest neighbors.
+  * Probably better than the previous one
+  *
+  * @param point array point
+  * @param k how many results
+  * @return list of (node, distance)
+  */
+def kNN2(point: Array[T], k: Int): List[(KDNode[T, D], Double)] = {
+    checkDimentions(point)
+    var candidates = mutable.Set[(KDNode[T, D], Double)]()
+    var searches = 0;
+    def euclideanDistance(p: Array[T]): Double =
+        Math.sqrt(p.zip(point).map { case (x,y) => Math.pow((y - x).toDouble, 2) }.sum)
+
+    def planeDistance(node: KDNode[T,D]): Double =
+        Math.sqrt(Math.pow(node.point(node.axis).toDouble() - point(node.axis).toDouble() ,2))
+
+    def maxDistance: Double = candidates.max(Ordering.by((pair: (KDNode[T, D], Double)) => pair._2))._2
+
+    def proneCandidates(): Unit = {
+        // :_* forces factory method to see the list as a list of arguments
+        candidates = scala.collection.mutable.Set(candidates.toList.sortWith(_._2 < _._2).take(k) :_*)
+    }
+
+    def searchNN(node: KDNode[T, D]): Unit = {
+        searches = searches + 1
+        val dist = euclideanDistance(node.point)
+
+        if (candidates.size < k || dist < maxDistance) candidates.add(node, dist)
+        var unexplored = ListBuffer[KDNode[T, D]]()
+        if (node.hasRightChild()) unexplored += node.right
+        if (node.hasLeftChild()) unexplored += node.left
+
+        unexplored.sortBy(planeDistance).foreach({ node =>
+            if (planeDistance(node) <= maxDistance || dist < maxDistance || candidates.size < k)
+                searchNN(node)
+        })
+
+        if (candidates.size > k) proneCandidates()
+    }
+
+    if (k < 1) throw new Exception("k less than 1!")
+    searchNN(root)
+    println(searches)
+    candidates.toList.sortWith(_._2 < _._2).take(k)
+}
