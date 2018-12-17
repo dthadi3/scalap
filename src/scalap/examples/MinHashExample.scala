@@ -1,5 +1,6 @@
 package scalap.examples
 
+import scalap.benchmark.Benchmark
 import scalap.hashing.MinHash
 
 import scala.io.Source
@@ -11,7 +12,13 @@ object MinHashExample extends App
 
         val random = new Random()
 
-        val lines = Source.fromFile("fixtures/random-text.txt").getLines.toList
+        println("[*] MinHash Example")
+        val lines = Source.fromFile("fixtures/random-text.txt")
+            .getLines
+            .toList
+            .map(_.replaceAll("[^a-zA-Z ]", "") // leters only
+                .toLowerCase)
+
         val documents = ((Stream from 0) zip lines).toMap
 
         println("[i] Creating MinHasher for " + documents.size + " size " + length )
@@ -31,5 +38,6 @@ object MinHashExample extends App
 
         println("[i] Documents similarity 100 and 101 = " + minHash.similarity(100, 101))
         println("[i] Documents similarity 0 and 1 = " + minHash.similarity(0, 1))
+        println()
     }
 }

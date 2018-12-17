@@ -1,5 +1,6 @@
 package scalap.examples
 
+import scalap.benchmark.Benchmark
 import scalap.tree.KDTree
 
 import scala.collection.mutable.ListBuffer
@@ -11,6 +12,9 @@ object KDTreeExample extends App
             nKNN: Int = 10000,
             nSearches: Int = 10000,
             nInsertions: Int = 10000): Unit = {
+
+        println("[*] KDTree Example")
+
         val random = new Random()
 
         var items = ListBuffer[(Array[Int], Int)]()
@@ -40,5 +44,6 @@ object KDTreeExample extends App
             for(i <- 0 until nInsertions)
                 kdTree.insert((List(random.nextInt(), random.nextInt()).toArray, 1))
         }
+        println()
     }
 }

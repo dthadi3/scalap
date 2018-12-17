@@ -1,4 +1,4 @@
-package scalap.examples
+package scalap.benchmark
 
 object Benchmark
 {

@@ -1,5 +1,6 @@
 package scalap.examples
 
+import scalap.benchmark.Benchmark
 import scalap.hashing.BloomFilter
 
 import scala.collection.mutable.ListBuffer
@@ -17,7 +18,7 @@ object BloomFilterExample extends App
     }
 
     def run(nElements: Int = 1000, nBits: Int = 10000, lookups: Int = 1000): Unit = {
-
+        println("[*] BloomFilter Example")
         println("[i] Creating bloomfilter with " + nElements + " expected elements and " + nBits + "bits")
         var bloomFilter = new BloomFilter( nElements, nBits)
 
@@ -37,6 +38,6 @@ object BloomFilterExample extends App
 
         bloomFilter.insert("savarakatranemia")
         println("[i] Word savarakatranemia exist in BloomFilter = " + bloomFilter.search("savarakatranemia"))
-
+        println()
     }
 }
