@@ -54,6 +54,20 @@ class LSH(minHashLength: Int = 100,
     }
 
     /**
+      * Finds k most similar documents by performing actual similarity check in the candidates set
+      * and filtering out the worse candidates. Results may be less than k.
+      * @param document string document
+      * @return k nearest neighbors
+      */
+    def knn(document: String, k: Int): List[Int] = {
+        val words = document.split(" ").map(_.mkString).toSet
+        findCandidates(words)
+            .toList
+            .sortBy(candidate => -similarity(words, minHash.documentWords(candidate)))
+            .take(k)
+    }
+
+    /**
       * Finds candidates by calling findCandidates on each band.
       * @param words a set of words (bag of words)
       * @return set of candidates

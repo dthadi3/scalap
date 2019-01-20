@@ -34,6 +34,7 @@ object LSHExample extends App
         }
 
         println("[i] Similar to  mmm to be or not to be: " + lsh.findSimilar("mmm to be or not to be"))
+        println("[i] knn to  mmm to be or not to be: " + lsh.knn("mmm to be or not to be", 2))
         println()
     }
 }
