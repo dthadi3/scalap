@@ -26,6 +26,7 @@ object KDTreeExample extends App
         var kdTree = Benchmark.time {
             new KDTree(items.toList)
         }
+        //kdTree.getNodes().foreach(println)
 
         println("[i] Performing " + nKNN + " knn searches")
         Benchmark.time{

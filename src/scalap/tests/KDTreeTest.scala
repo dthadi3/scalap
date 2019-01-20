@@ -23,6 +23,7 @@ class KDTreeTest extends BaseTest
         (List(1,7).toArray, 1)
     )
     val kd = new KDTree[Int, Int](items)
+//    kd.getNodes().foreach(println)
 
     def searchTest(): Unit = {
         items.foreach(item => assertTrue(kd.search(item._1).isInstanceOf[KDNode[Int, Int]]))

@@ -282,7 +282,7 @@ class KDTree[T: Numeric, D](var items: List[(Array[T], D)])
 
     /**
       * Get all nodes starting from node
-      *
+      * Uses Depth-first search.
       * @param node a node (default is tree root)
       * @return
       */
