@@ -34,7 +34,7 @@ class LSH(minHashLength: Int = 100,
             val rowsPerBand = (minHashLength.toFloat / numberOfBands).ceil.toInt
             val start = bandIndex * rowsPerBand
             val end = if (bandIndex == numberOfBands - 1) minHashLength else start + rowsPerBand
-            val hashSigPart = minHashes.map(document => (document._1, document._2.slice(start, end)))
+            val hashSigPart = minHashes.map(documentMinHash => (documentMinHash._1, documentMinHash._2.slice(start, end)))
             val band = new LSHBand()
             hashSigPart.foreach(array => band.add(array))
             band

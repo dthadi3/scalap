@@ -13,7 +13,9 @@ import scala.util.Random
   */
 class MinHash(documents: Map[Int, String], var length: Int)
 {
+    // (document id, document words)
     val documentWords: Map[Int, Set[String]] = extractDocumentWords()
+    // (word, word id)
     val vocabulary: Map[String, Int] = documentWords.values.flatten.toSet.toIndexedSeq.zipWithIndex.toMap
     val hashFunctions: Seq[Int => Int] = generateHashFunctions(length)
 

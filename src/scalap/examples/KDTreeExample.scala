@@ -10,6 +10,7 @@ object KDTreeExample extends App
 {
     def run(nNodes: Int = 100000,
             nKNN: Int = 10000,
+            nRangeSearches: Int = 1000,
             nSearches: Int = 10000,
             nInsertions: Int = 10000): Unit = {
 
@@ -32,6 +33,12 @@ object KDTreeExample extends App
         Benchmark.time{
             for(i <- 0 until nKNN)
                 kdTree.kNN(List(random.nextInt(), random.nextInt()).toArray, random.nextInt(10) + 1)
+        }
+
+        println("[i] Performing " + nRangeSearches + " range searches")
+        Benchmark.time{
+            for(i <- 0 until nRangeSearches)
+                kdTree.rangeSearch(List(random.nextInt(), random.nextInt()).toArray, List(random.nextInt(), random.nextInt()).toArray)
         }
 
         println("[i] Performing " + nSearches + " searches")

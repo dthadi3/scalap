@@ -18,8 +18,3 @@
        --minhash      run MinHash example
        --lsh          run LSH example
     
-## Compile 
-     
-    sbt package
-    
- creates a jar file in target directory   

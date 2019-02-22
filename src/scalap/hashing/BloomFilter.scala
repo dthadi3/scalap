@@ -26,6 +26,7 @@ class BloomFilter(var elementsCount: Int, var bitsCount: Int, var hashesCount: I
     }
 
     private val bitSet = new mutable.BitSet(bitsCount)
+
     checkInputs()
 //    println("Number of HashFunctions: " + hashesCount)
 //    println("False Positive Probability: " + porbabilityOfFalsePositives)
@@ -63,7 +64,7 @@ class BloomFilter(var elementsCount: Int, var bitsCount: Int, var hashesCount: I
       * Calculates the probability of a false negative to occur in search.
       * @return probability
       */
-    def porbabilityOfFalsePositives: Double = {
+    def probabilityOfFalsePositives: Double = {
         // Aproximation: Math.pow(1f - Math.exp((-hashesCount*this.elementsCount)/this.bitsCount), hashesCount)
         pow(1f - pow(1-1f/this.bitsCount, this.hashesCount*this.elementsCount), hashesCount)
     }

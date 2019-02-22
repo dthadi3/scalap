@@ -25,7 +25,7 @@ object BloomFilterExample extends App
         var items = ListBuffer[String]()
 
         println("[i] Building Bloom Filter")
-        println("[i] False positive probabilitity is " + bloomFilter.porbabilityOfFalsePositives)
+        println("[i] False positive probabilitity is " + bloomFilter.probabilityOfFalsePositives)
         println("[i] Performing " + nElements + " Insertions")
         Benchmark.time {
             bloomFilter.insert(randomString(10))

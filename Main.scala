@@ -34,7 +34,8 @@ object Main extends App {
         if(args.contains("--kdtree") || args.contains("--examples"))
             KDTreeExample.run()
         if(args.contains("--bloomfilter") || args.contains("--examples"))
-            BloomFilterExample.run()
+
+
         if(args.contains("--minhash") || args.contains("--examples"))
             MinHashExample.run()
         if(args.contains("--lsh") || args.contains("--examples"))
