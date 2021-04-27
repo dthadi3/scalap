@@ -6,5 +6,5 @@ arch:
   - ppc64le
 jdk: openjdk11
 before_install:
-  - apt update -y
+#  - apt update -y
   - apt install ant -y
