@@ -8,3 +8,5 @@ jdk: openjdk11
 before_install:
 #  - apt update -y
   - sudo apt install ant -y
+install:
+  - ./exe tests
