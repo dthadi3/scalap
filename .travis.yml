@@ -7,4 +7,4 @@ arch:
 jdk: openjdk11
 before_install:
 #  - apt update -y
-  - apt install ant -y
+  - sudo apt install ant -y
